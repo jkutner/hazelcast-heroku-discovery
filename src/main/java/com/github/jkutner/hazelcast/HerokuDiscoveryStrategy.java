@@ -40,8 +40,9 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
 
       for (InetAddress host : hosts) {
         Address address = ipToAddress(host.getHostAddress());
-        if (LOGGER.isFinestEnabled())
+        if (LOGGER.isFinestEnabled()) {
           LOGGER.finest("Found node ip-address is: " + address);
+        }
 
         servers.add(new SimpleDiscoveryNode(address));
       }
@@ -50,8 +51,9 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
         LOGGER.warning("Could not find any service for serviceName '" + serviceName + "'");
       }
     } catch (Exception e) {
-      if (LOGGER.isFinestEnabled())
-        e.printStackTrace();
+      if (LOGGER.isFinestEnabled()) {
+        LOGGER.warning(e);
+      }
 
       LOGGER.warning("DNS lookup for serviceDns '" + serviceName + "' failed");
       return Collections.emptyList();
