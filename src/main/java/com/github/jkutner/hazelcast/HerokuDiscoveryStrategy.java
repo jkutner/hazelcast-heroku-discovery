@@ -47,7 +47,7 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
     }
 
     String mergeDelay = getOrNull(new SimplePropertyDefinition("mergeDelay", PropertyTypeConverter.STRING));
-    System.setProperty("hazelcast.merge.first.run.delay.seconds", mergeDelay == null ? "5" : mergeDelay);
+    System.setProperty("hazelcast.merge.first.run.delay.seconds", mergeDelay == null ? "20" : mergeDelay);
 
     // TODO parse /etc/heroku/space-topology.json instead,
     // but that should go in a separate library
@@ -73,14 +73,14 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
         }
 
         if (servers.isEmpty()) {
-          LOGGER.warning("Could not find any service for serviceName '" + serviceName + "'");
+          LOGGER.warning("Could not find any service for service '" + serviceName + "'");
         }
       } catch (Exception e) {
         if (LOGGER.isFinestEnabled()) {
           LOGGER.warning(e);
         }
 
-        LOGGER.warning("DNS lookup for serviceDns '" + serviceName + "' failed");
+        LOGGER.warning("DNS lookup for service '" + serviceName + "' failed");
       }
     }
 
