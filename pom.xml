@@ -3,7 +3,7 @@
   <groupId>com.github.jkutner</groupId>
   <artifactId>hazelcast-heroku-discovery</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>3.7.0-SNAPSHOT</version>
   <name>hazelcast-heroku-discovery</name>
   <description>Hazelcast Discovery Plugin for Heroku Private Spaces</description>
 
