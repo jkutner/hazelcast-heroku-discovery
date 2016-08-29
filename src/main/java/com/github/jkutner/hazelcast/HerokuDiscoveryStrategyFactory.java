@@ -17,7 +17,7 @@ public class HerokuDiscoveryStrategyFactory implements DiscoveryStrategyFactory 
 
   public HerokuDiscoveryStrategyFactory() {
     this.propertyDefinitions = Collections.unmodifiableCollection(
-        new ArrayList<>()
+        new ArrayList<PropertyDefinition>()
     );
   }
 
