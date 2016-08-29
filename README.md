@@ -6,6 +6,25 @@ the Heroku DNS Discovery in [Heroku Private Spaces](https://devcenter.heroku.com
 
 ## Usage
 
+In Maven:
+
+```xml
+<dependency>
+  <groupId>com.github.jkutner</groupId>
+  <artifactId>hazelcast-heroku-discovery</artifactId>
+  <version>3.7.0</version>
+</dependency>
+```
+
+In Gradle:
+
+```groovy
+dependencies {
+    compile('com.hazelcast:hazelcast-all:3.7')
+    compile('com.github.jkutner:hazelcast-heroku-discovery:3.7.0')
+}
+```
+
 A minimal `hazelcast.xml` looks like this:
 
 ```xml
