@@ -40,4 +40,33 @@ Hazelcast, since 3.6, offers a, so called, Discovery SPI to integrate external d
 
 ## Configuration
 
-No configuration is required. The plugin will detect the service name from the `$HEROKU_DNS_FORMATION_NAME` environment variable set by Heroku.
+No configuration is required by default. The plugin will detect the service name from the `$HEROKU_DNS_FORMATION_NAME` environment variable set by Heroku.
+
+If you want to configure the `hazelcast.merge.first.run.delay.seconds`, set the following in your `hazelcast.xml`:
+
+```xml
+<discovery-strategy
+  enabled="true"
+  class="com.github.jkutner.hazelcast.HerokuDiscoveryStrategy">
+    <properties>
+      <property name="mergeDelay">30</property>
+    </properties>
+</discovery-strategy>
+```
+
+If you want to configure the  service names (i.e. the process types) that will be discovered, you can set a `;`
+delimited list like this:
+
+```xml
+<discovery-strategy
+  enabled="true"
+  class="com.github.jkutner.hazelcast.HerokuDiscoveryStrategy">
+    <properties>
+      <property name="serviceNames">web;worker;job</property>
+    </properties>
+</discovery-strategy>
+```
+
+## License
+
+MIT
