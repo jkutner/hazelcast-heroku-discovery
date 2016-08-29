@@ -1,6 +1,8 @@
 package com.github.jkutner.hazelcast;
 
 import com.hazelcast.config.NetworkConfig;
+import com.hazelcast.config.properties.PropertyTypeConverter;
+import com.hazelcast.config.properties.SimplePropertyDefinition;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
 import com.hazelcast.nio.Address;
@@ -8,9 +10,8 @@ import com.hazelcast.spi.discovery.AbstractDiscoveryStrategy;
 import com.hazelcast.spi.discovery.DiscoveryNode;
 import com.hazelcast.spi.discovery.SimpleDiscoveryNode;
 
-import java.util.*;
-
 import java.net.InetAddress;
+import java.util.*;
 
 /**
  * @author Joe Kutner on 8/28/16.
@@ -19,13 +20,34 @@ import java.net.InetAddress;
 public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
   private static final ILogger LOGGER = Logger.getLogger(HerokuDiscoveryStrategy.class);
 
-  private final String serviceName;
+  private final Collection<String> serviceNames;
 
   public HerokuDiscoveryStrategy(ILogger logger, Map<String, Comparable> properties) {
     super(logger, properties);
-    this.serviceName = System.getenv("HEROKU_DNS_FORMATION_NAME");
 
-    System.setProperty("hazelcast.merge.first.run.delay.seconds", "20");
+    String serviceNamesProp = getOrNull(new SimplePropertyDefinition("serviceNames", PropertyTypeConverter.STRING));
+    if (serviceNamesProp == null) {
+      String formationName = System.getenv("HEROKU_DNS_FORMATION_NAME");
+      if (formationName == null) {
+        throw new IllegalArgumentException("You must enable Heroku DNS Service Discovery for this Hazelcast plugin to work!");
+      } else {
+        this.serviceNames = Collections.unmodifiableCollection(Arrays.asList(formationName));
+      }
+    } else {
+      List<String> serviceNamesList = new ArrayList<>();
+      for (String serviceName : serviceNamesProp.split(";")) {
+        String appName = System.getenv("HEROKU_DNS_APP_NAME");
+        if (appName == null) {
+          throw new IllegalArgumentException("You must enable Heroku DNS Service Discovery for this Hazelcast plugin to work!");
+        } else {
+          serviceNamesList.add(serviceName + "." + appName);
+        }
+      }
+      this.serviceNames = Collections.unmodifiableCollection(serviceNamesList);
+    }
+
+    String mergeDelay = getOrNull(new SimplePropertyDefinition("mergeDelay", PropertyTypeConverter.STRING));
+    System.setProperty("hazelcast.merge.first.run.delay.seconds", mergeDelay == null ? "5" : mergeDelay);
 
     // TODO parse /etc/heroku/space-topology.json instead,
     // but that should go in a separate library
@@ -37,28 +59,29 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
   public Iterable<DiscoveryNode> discoverNodes() {
     List<DiscoveryNode> servers = new ArrayList<>();
 
-    try {
-      InetAddress[] hosts = InetAddress.getAllByName(serviceName);
+    for (String serviceName : this.serviceNames) {
+      try {
+        InetAddress[] hosts = InetAddress.getAllByName(serviceName);
 
-      for (InetAddress host : hosts) {
-        Address address = ipToAddress(host.getHostAddress());
-        if (LOGGER.isFinestEnabled()) {
-          LOGGER.finest("Found node ip-address is: " + address);
+        for (InetAddress host : hosts) {
+          Address address = ipToAddress(host.getHostAddress());
+          if (LOGGER.isFinestEnabled()) {
+            LOGGER.finest("Found node ip-address is: " + address);
+          }
+
+          servers.add(new SimpleDiscoveryNode(address));
         }
 
-        servers.add(new SimpleDiscoveryNode(address));
-      }
+        if (servers.isEmpty()) {
+          LOGGER.warning("Could not find any service for serviceName '" + serviceName + "'");
+        }
+      } catch (Exception e) {
+        if (LOGGER.isFinestEnabled()) {
+          LOGGER.warning(e);
+        }
 
-      if (servers.isEmpty()) {
-        LOGGER.warning("Could not find serviceName '" + serviceName + "'");
+        LOGGER.warning("DNS lookup for serviceDns '" + serviceName + "' failed");
       }
-    } catch (Exception e) {
-      if (LOGGER.isFinestEnabled()) {
-        LOGGER.warning(e);
-      }
-
-      LOGGER.warning("DNS lookup for serviceDns '" + serviceName + "' failed");
-      return Collections.emptyList();
     }
 
     return servers;
