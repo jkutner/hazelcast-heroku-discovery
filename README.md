@@ -1,8 +1,6 @@
 # Hazelcast Heroku Discovery [![Build Status](https://travis-ci.org/jkutner/hazelcast-heroku-discovery.svg?branch=master)](https://travis-ci.org/jkutner/hazelcast-heroku-discovery)
 
-This [Hazelcast](https://hazelcast.org/) Discovery Plugin
-will lookup IP addresses of other members by resolving service names against
-the Heroku DNS Discovery in [Heroku Private Spaces](https://devcenter.heroku.com/articles/private-spaces).
+This [Hazelcast](https://hazelcast.org/) Discovery SPI Plugin will lookup IP addresses of other members by resolving service names against the Heroku DNS Discovery in [Heroku Private Spaces](https://devcenter.heroku.com/articles/private-spaces).
 
 ## Usage
 
@@ -20,8 +18,8 @@ In Gradle:
 
 ```groovy
 dependencies {
-    compile('com.hazelcast:hazelcast-all:3.7')
-    compile('com.github.jkutner:hazelcast-heroku-discovery:3.7.0')
+    compile 'com.hazelcast:hazelcast-all:3.7'
+    compile 'com.github.jkutner:hazelcast-heroku-discovery:3.7.0'
 }
 ```
 
@@ -55,7 +53,7 @@ A minimal `hazelcast.xml` looks like this:
 
 ## Hazelcast Discovery SPI
 
-Hazelcast, since 3.6, offers a, so called, Discovery SPI to integrate external discovery mechanisms into the system. For more information please rely on the official documentation, available [here](http://docs.hazelcast.org/docs/3.6-EA2/manual/html-single/index.html#discovery-spi).
+Hazelcast since v3.6 offers a Discovery SPI to integrate external discovery mechanisms into the system. For more information please rely on the official documentation, available [here](http://docs.hazelcast.org/docs/3.6-EA2/manual/html-single/index.html#discovery-spi).
 
 ## Configuration
 
