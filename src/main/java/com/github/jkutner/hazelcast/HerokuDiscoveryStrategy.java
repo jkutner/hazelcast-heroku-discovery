@@ -25,8 +25,7 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
     super(logger, properties);
     this.serviceName = System.getenv("HEROKU_DNS_FORMATION_NAME");
 
-    String mergeDelay = System.getProperty("heroku.hazelcast.merge.first.run.delay.seconds");
-    System.setProperty("hazelcast.merge.first.run.delay.seconds", mergeDelay == null ? "20" : mergeDelay);
+    System.setProperty("hazelcast.merge.first.run.delay.seconds", "20");
 
     // TODO parse /etc/heroku/space-topology.json instead,
     // but that should go in a separate library
