@@ -1,7 +1,7 @@
 # Hazelcast Heroku Discovery [![Build Status](https://travis-ci.org/jkutner/hazelcast-heroku-discovery.svg?branch=master)](https://travis-ci.org/jkutner/hazelcast-heroku-discovery)
 
 This [Hazelcast](https://hazelcast.org/) Discovery Plugin
-provides the possibility to lookup IP addresses of other members by resolving those requests against
+will lookup IP addresses of other members by resolving service names against
 the Heroku DNS Discovery in [Heroku Private Spaces](https://devcenter.heroku.com/articles/private-spaces).
 
 ## Usage
