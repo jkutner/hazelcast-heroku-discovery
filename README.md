@@ -20,7 +20,6 @@ In Gradle:
 
 ```groovy
 dependencies {
-    compile('com.hazelcast:hazelcast-all:3.7')
     compile('com.github.jkutner:hazelcast-heroku-discovery:3.7.0')
 }
 ```
@@ -55,7 +54,8 @@ A minimal `hazelcast.xml` looks like this:
 
 ## Hazelcast Discovery SPI
 
-Hazelcast, since 3.6, offers a, so called, Discovery SPI to integrate external discovery mechanisms into the system. For more information please rely on the official documentation, available [here](http://docs.hazelcast.org/docs/3.6-EA2/manual/html-single/index.html#discovery-spi).
+Hazelcast, since 3.6, offers a, so called, Discovery SPI to integrate external discovery mechanisms into the system.
+For more information please rely on the official documentation, available [here](http://docs.hazelcast.org/docs/3.6-EA2/manual/html-single/index.html#discovery-spi).
 
 ## Configuration
 
@@ -73,7 +73,7 @@ If you want to configure the `hazelcast.merge.first.run.delay.seconds`, set the 
 </discovery-strategy>
 ```
 
-If you want to configure the  service names (i.e. the process types) that will be discovered, you can set a `;`
+If you want to configure the service names (i.e. the process types) that will be discovered, you can set a `;`
 delimited list like this:
 
 ```xml
