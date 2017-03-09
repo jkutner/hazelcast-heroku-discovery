@@ -11,6 +11,7 @@ import com.hazelcast.spi.discovery.DiscoveryNode;
 import com.hazelcast.spi.discovery.SimpleDiscoveryNode;
 
 import java.net.InetAddress;
+import java.security.Security;
 import java.util.*;
 
 /**
@@ -51,8 +52,8 @@ public class HerokuDiscoveryStrategy extends AbstractDiscoveryStrategy {
 
     // TODO parse /etc/heroku/space-topology.json instead,
     // but that should go in a separate library
-    System.setProperty("networkaddress.cache.ttl", "20");
-    System.setProperty("networkaddress.cache.negative.ttl", "0");
+    Security.setProperty("networkaddress.cache.ttl", "20");
+    Security.setProperty("networkaddress.cache.negative.ttl", "0");
   }
 
   @Override
